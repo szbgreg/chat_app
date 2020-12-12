@@ -10,7 +10,12 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
 
   const message = e.target.elements.message.value;
 
-  socket.emit('sendMessage', message);
+  socket.emit('sendMessage', message, (error) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message delivered');
+  });
 });
 
 // We send a 'sendLocation' event to server if the
@@ -23,13 +28,8 @@ document.querySelector('#sendLocation').addEventListener('click', (e) => {
 
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
-    socket.emit('sendLocation', { latitude, longitude });
+    socket.emit('sendLocation', { latitude, longitude }, () => {
+      console.log('Location shared!');
+    });
   });
-});
-
-// Show gmap link with coords if we get 'location' event from server.
-socket.on('location', (coords) => {
-  console.log(
-    `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
-  );
 });
