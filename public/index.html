@@ -4,28 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat App</title>
+    <link rel="icon" href="/img/favicon.png" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    Chat APP
-
-    <div id="messages"></div>
-
-    <form action="POST" id="message-form">
-      <input type="text" name="message" />
-      <button>Send</button>
-    </form>
-
-    <button id="sendLocation">Share Location</button>
+    <div class="chat">
+      <div class="chat__sidebar"></div>
+      <div class="chat__main">
+        <div id="messages" class="chat__messages"></div>
+        <div class="compose">
+          <form action="POST" id="message-form">
+            <input type="text" name="message" />
+            <button>Send</button>
+          </form>
+          <button id="sendLocation">Share Location</button>
+        </div>
+      </div>
+    </div>
 
     <script id="message-template" type="text/html">
-      <div>
-        <p>{{createdAt}} {{message}}</p>
+      <div class="message">
+        <p>
+          <span class="message__name">A User name</span>
+          <span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p>{{message}}</p>
       </div>
     </script>
 
     <script id="location-template" type="text/html">
-      <div>
-        <p>{{createdAt}} <a href="{{location}}" target="blank">Link</a></p>
+      <div class="message">
+        <p>
+          <span class="message__name">A User name</span>
+          <span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p><a href="{{location}}" target="blank">Link</a></p>
       </div>
     </script>
 
