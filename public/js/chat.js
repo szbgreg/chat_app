@@ -5,9 +5,29 @@ const messageForm = document.querySelector('#message-form');
 const messageFormInput = messageForm.querySelector('input');
 const messageFormBtn = messageForm.querySelector('button');
 const sendLocationBtn = document.querySelector('#sendLocation');
+const messages = document.querySelector('#messages');
+
+// Templates
+const messageTemplate = document.querySelector('#message-template').innerHTML;
+const locationTemplate = document.querySelector('#location-template').innerHTML;
 
 // Show message if we get 'message' event from server!
-socket.on('message', (data) => console.log(data));
+socket.on('message', (message) => {
+  const html = Mustache.render(messageTemplate, {
+    message: message.text,
+    createdAt: moment(message.createdAt).format('LT')
+  });
+  messages.insertAdjacentHTML('beforeend', html);
+});
+
+// Show location if we get 'locationMessage' event from server!
+socket.on('locationMessage', (data) => {
+  const html = Mustache.render(locationTemplate, {
+    location: data.url,
+    createdAt: moment(data.createdAt).format('LT')
+  });
+  messages.insertAdjacentHTML('beforeend', html);
+});
 
 // We send a 'sendMessage' event to server with the
 // form input value on submit btn click

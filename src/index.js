@@ -4,6 +4,8 @@ const http = require('http');
 const socketio = require('socket.io');
 const Filter = require('bad-words');
 
+const { generateMessage, generateLocatonMessage } = require('./utils/messages');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -18,8 +20,8 @@ io.on('connection', (socket) => {
 
   // Send welcome message to joined user
   // Send to everyone else that a user joined
-  socket.emit('message', 'Welcome!');
-  socket.broadcast.emit('message', 'A new user has joined!');
+  socket.emit('message', generateMessage('Welcome!'));
+  socket.broadcast.emit('message', generateMessage('A new user has joined!'));
 
   // Send message text to everyone when user send a message
   socket.on('sendMessage', (message, callback) => {
@@ -27,22 +29,24 @@ io.on('connection', (socket) => {
     if (filter.isProfane(message)) {
       return callback('Profanity is not allowed');
     }
-    io.emit('message', message);
+    io.emit('message', generateMessage(message));
     callback();
   });
 
   // Send message to everyone when user share his location
   socket.on('sendLocation', (coords, callback) => {
     io.emit(
-      'message',
-      `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+      'locationMessage',
+      generateLocatonMessage(
+        `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+      )
     );
     callback();
   });
 
   // Send message to everyone else when a user left
   socket.on('disconnect', () => {
-    io.emit('message', 'A user has left!');
+    io.emit('message', generateMessage('A user has left!'));
   });
 });
 
