@@ -18,10 +18,18 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New WebSocket connection');
 
-  // Send welcome message to joined user
-  // Send to everyone else that a user joined
-  socket.emit('message', generateMessage('Welcome!'));
-  socket.broadcast.emit('message', generateMessage('A new user has joined!'));
+  // Join user to room
+  socket.on('join', ({ username, room }) => {
+    socket.join(room);
+
+    // Send welcome message to joined user
+    socket.emit('message', generateMessage('Welcome!'));
+
+    // Send to everyone else that a user joined
+    socket.broadcast
+      .to(room)
+      .emit('message', generateMessage(`${username} has joined!`));
+  });
 
   // Send message text to everyone when user send a message
   socket.on('sendMessage', (message, callback) => {
