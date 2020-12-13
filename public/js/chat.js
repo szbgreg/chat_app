@@ -74,4 +74,9 @@ sendLocationBtn.addEventListener('click', (e) => {
 });
 
 // Sending query strings to server
-socket.emit('join', { username, room });
+socket.emit('join', { username, room }, (error) => {
+  if (error) {
+    alert(error);
+    location.href = '/';
+  }
+});
