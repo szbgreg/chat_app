@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="chat">
-      <div class="chat__sidebar"></div>
+      <div id="sidebar" class="chat__sidebar"></div>
       <div class="chat__main">
         <div id="messages" class="chat__messages"></div>
         <div class="compose">
@@ -39,6 +39,18 @@
           <span class="message__meta">{{createdAt}}</span>
         </p>
         <p><a href="{{location}}" target="blank">Link</a></p>
+      </div>
+    </script>
+
+    <script id="usersList-template" type="text/html">
+      <div>
+        <h2 class="room-title">{{room}}</h2>
+        <h3 class="list-title">Users</h3>
+        <ul class="users">
+          {{#users}}
+          <li>{{username}}</li>
+          {{/users}}
+        </ul>
       </div>
     </script>
 
