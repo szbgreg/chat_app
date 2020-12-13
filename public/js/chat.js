@@ -19,6 +19,7 @@ const { username, room } = Qs.parse(location.search, {
 // Show message if we get 'message' event from server!
 socket.on('message', (message) => {
   const html = Mustache.render(messageTemplate, {
+    user: message.user,
     message: message.text,
     createdAt: moment(message.createdAt).format('LT')
   });
@@ -28,6 +29,7 @@ socket.on('message', (message) => {
 // Show location if we get 'locationMessage' event from server!
 socket.on('locationMessage', (data) => {
   const html = Mustache.render(locationTemplate, {
+    user: data.user,
     location: data.url,
     createdAt: moment(data.createdAt).format('LT')
   });
